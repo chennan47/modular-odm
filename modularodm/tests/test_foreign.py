@@ -56,46 +56,51 @@ class TestForeign(unittest.TestCase):
         self.tag3 = Tag(value=str(random.randint(0, 1000)), count="count_3", misc="foobaz", misc2="b")
         self.tag3.save()
 
-        self.tag4 = Tag(value=str(random.randint(0, 1000)), count="count_4", misc="bar", misc2="a")
-        self.tag4.save()
-
-        self.tag5 = Tag(value=str(random.randint(0, 1000)), count="count_5", misc="baz", misc2="b")
-        self.tag5.save()
-
         self.blog1 = Blog(title='blogtitle1')
 
 
     def test_for_ref(self):
-        self.blog1.tags.append(self.tag2)
+        """
+        test for foreign field reference
+        """
         self.blog1.tag = self.tag2
-        self.blog1.save()
         self.assertEqual(self.blog1.tag.count, "count_2")
         self.assertEqual(self.blog1.tag.misc, "foobar")
         self.assertEqual(self.blog1.tag.misc2, "a")
 
     def test_for_append(self):
+        """
+        test for append function
+        """
         self.blog1.tags.append(self.tag2)
         self.blog1.tags.append(self.tag1)
         self.blog1.tags.append(self.tag3)
         self.assertTrue(self.blog1.tags[2] is self.tag3)
 
     def test_for_pop(self):
+        """
+        test for pop function
+        """
         self.blog1.tags.append(self.tag2)
         self.blog1.tags.append(self.tag1)
         self.blog1.tags.append(self.tag3)
         self.tag6=self.blog1.tags.pop()
-        bool = self.tag3 in self.blog1.tags
         self.assertTrue(self.tag6 is self.tag3)
-        self.assertEqual(bool, False)
+        self.assertFalse(self.tag3 in self.blog1.tags)
 
     def test_for_set_item(self):
+        """
+        test for set_item function
+        """
         self.blog1.tags.append(self.tag2)
         self.blog1.tags[0]=self.tag1
         self.assertTrue(self.tag1 in self.blog1.tags)
-        bool= self.tag2 in self.blog1.tags
-        self.assertEqual(bool, False)
+        self.assertFalse(self.tag2 in self.blog1.tags)
 
     def test_for_empty_tag(self):
+        """
+        test for empty function
+        """
         self.blog1.tags.append(self.tag2)
         self.blog1.tags={}
         bool = self.tag2 in self.blog1.tags
